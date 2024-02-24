@@ -4,32 +4,19 @@ import TodoContext from "../context/TodoContext";
 
 const TodoList = () => {
   const [searchValue, setSearchValue] = useState("");
-  const { todos, setTodos } = useContext(TodoContext);
+  const { todos, dispatch } = useContext(TodoContext);
   const [filteredSearch, setFilteredSearch] = useState([]);
 
   const onDeleteTodo = (id) => {
-    const newTodo = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodo);
+    dispatch({ type: "onDeleteTodo", payload: { id } });
   };
 
   const onEdit = (id, newText) => {
-    const newTodoList = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.text = newText;
-      }
-      return todo;
-    });
-    setTodos(newTodoList);
+    dispatch({ type: "onEdit", payload: { id, newText } });
   };
 
   const onFinishedTodo = (id, state) => {
-    const newTodoList = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.isFinished = state;
-      }
-      return todo;
-    });
-    setTodos(newTodoList);
+    dispatch({ type: "onFinishedTodo", payload: { id, state } });
   };
 
   const handleSearch = () => {
@@ -38,6 +25,9 @@ const TodoList = () => {
     );
     setFilteredSearch(newFilteredTodos);
   };
+  if (todos.length == 0) {
+    return;
+  }
 
   return (
     <div className="flex flex-col gap-3 border-t-2 border-black">

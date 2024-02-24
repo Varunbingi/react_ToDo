@@ -3,7 +3,12 @@ import TodoContext from "../context/TodoContext";
 
 const AddTodo = () => {
   const [todoText, setTodoText] = useState("");
-  const { todos, setTodos } = useContext(TodoContext);
+  const { dispatch } = useContext(TodoContext);
+  const addToDo = (todoText) => {
+    if (todoText.length != 0) {
+      dispatch({ type: "addToDo", payload: { todoText } });
+    }
+  };
 
   return (
     <div className="w-full  ">
@@ -19,14 +24,7 @@ const AddTodo = () => {
       <button
         className="bg-blue-800 py-2 px-4 font-semibold text-white rounded-md"
         onClick={() => {
-          if (todoText.length != 0) {
-            let nextId = todos.length + 1;
-            setTodos([
-              ...todos,
-              { id: nextId, isFinished: false, text: todoText },
-            ]);
-          }
-
+          addToDo(todoText);
           setTodoText("");
         }}
       >
